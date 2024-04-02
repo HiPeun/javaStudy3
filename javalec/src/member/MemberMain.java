@@ -28,25 +28,81 @@ public class MemberMain {
 			int selNum = sc.nextInt();
 			sc.nextLine();
 			if (selNum == 1) {
-				System.out.print("\n아이디를 입력해 주세요: ");
-				String id = sc.nextLine();
+				
+}
+				
+					while(true) {
+		            System.out.print("\n아이디를 입력해 주세요: ");
+		            String id = sc.nextLine(); 
+		           
+ 
+		            // 입력값이 비어있는지 확인
+		            if (id.isEmpty()) {
+		                System.out.println("아이디를 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
 
-				System.out.print("\n패스워드를 입력해 주세요: ");
-				String pw = sc.nextLine();
+		            // 아이디가 이미 존재하는지 확인
+		            if (mDao.isExistingId(id)) {
+		                System.out.println("이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
+		            
+		            // 아이디 길이 확인
+		            MemberDTO comparisonResult = mDao.comparisonMember(id);
+		            if (comparisonResult != null) {
+		                System.out.println("이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
 
-				System.out.print("\n이름을 입력해 주세요: ");
-				String name = sc.nextLine();
+		            // 아이디가 이미 존재하는지 확인
+		            if (mDao.isExistingId(id)) {
+		                System.out.println("이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
 
-				System.out.print("\n 이메일을 입력해 주세요: ");
-				String email = sc.nextLine();
+		            System.out.print("패스워드를 입력해 주세요: ");
+		            String pw = sc.nextLine();
 
-				dto.MemberDTO mDto = new dto.MemberDTO(id, pw, name, email);
-				int result = mDao.insertMember(mDto);
-				if (result > 0) {
-					System.out.println("회원등록 성공");
-				} else {
-					System.out.println("회원등록 실패");
-				}
+		            // 입력값이 비어있는지 확인
+		            if (pw.isEmpty()) {
+		                System.out.println("패스워드를 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
+
+		            System.out.print("이름을 입력해 주세요: ");
+		            String name = sc.nextLine();
+
+		            // 입력값이 비어있는지 확인
+		            if (name.isEmpty()) {
+		                System.out.println("이름을 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
+
+		            System.out.print("이메일을 입력해 주세요: ");
+		            String email = sc.nextLine();
+
+		            // 입력값이 비어있는지 확인
+		            if (email.isEmpty()) {
+		                System.out.println("이메일을 입력해주세요.");
+		                continue; // 다시 입력 받도록 반복
+		            }
+
+		            // 유효성 검사가 모두 통과한 경우에만 나머지 코드가 실행됩니다.
+
+		            // 나머지 회원가입 로직
+		            dto.MemberDTO mDto = new dto.MemberDTO(id, pw, name, email);
+		            int result = mDao.insertMember(mDto);
+		            if (result > 0) {
+		                System.out.println("\n\n\n\n회원 등록 성공");
+		            } else {
+		                System.out.println("회원 등록 실패");
+		            }
+
+		            // 회원가입 완료 후 반복 종료
+		            break;
+		        }
+			    
 			} else if (selNum == 2) {
 				System.out.print("수정할 회원의 아이디를 입력해 주세요: ");
 				String id = sc.nextLine();
@@ -125,6 +181,7 @@ public class MemberMain {
 
 				// 회원 목록 출력
 				System.out.println("============== <회원 목록> ===============");
+				
 				for (MemberDTO member : members) {
 					System.out.println("[아이디]: " + member.getId() + ", [비밀번호]: " + member.getPw() + ", [이름]: "
 							+ member.getName() + ", [이메일]: " + member.getEmail());
@@ -133,6 +190,8 @@ public class MemberMain {
 				
 
 			} else if (selNum == 7) {
+				
+				//회원 이름으로 검색 
 				System.out.print(" 조회하고 싶은 회원의 아이디를 입력하세요:  ");
 				String id = sc.nextLine();
 

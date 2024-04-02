@@ -1,12 +1,15 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.hanul.common.DBManager;
 
 import dto.MemberDTO;
 
@@ -18,10 +21,8 @@ public class MemberDAO {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
 
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "INSERT INTO member VALUES(?, ?, ?, ?, sysdate)";
 
 			pstmt = con.prepareStatement(sql);
@@ -34,21 +35,8 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBManager.close(con, pstmt, null);
+			
 
 		}
 
@@ -61,10 +49,7 @@ public class MemberDAO {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "UPDATE member SET pw=?, name=?, email=? WHERE id=?";
 
 			pstmt = con.prepareStatement(sql);
@@ -77,21 +62,8 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBManager.close(con, pstmt, null);
+			
 		}
 
 		return result;
@@ -104,9 +76,7 @@ public class MemberDAO {
 		MemberDTO member = null;
 
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "SELECT * FROM member WHERE id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -122,27 +92,8 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+		DBManager.close(con, pstmt, rs);
+		
 		}
 		return member;
 	} // 회원 삭제 부분
@@ -152,10 +103,7 @@ public class MemberDAO {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "DELETE FROM member WHERE id=? AND pw=?";
 
 			pstmt = con.prepareStatement(sql);
@@ -166,21 +114,7 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			DBManager.close(con, pstmt, null);
 		}
 
 		return result;
@@ -193,10 +127,7 @@ public class MemberDAO {
 		ResultSet rs = null;
 		MemberDTO member = null;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "SELECT * FROM member WHERE id=? AND pw=?";
 
 			pstmt = con.prepareStatement(sql);
@@ -218,27 +149,9 @@ public class MemberDAO {
 			e.printStackTrace();
 		} finally {
 			// 자원 해제
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+		
+			DBManager.close(con, pstmt, rs);
+			
 		}
 
 		// 조회된 회원 정보를 담은 MemberDTO 객체를 반환합니다.
@@ -252,10 +165,7 @@ public class MemberDAO {
 		PreparedStatement pstmt = null;
 		int result = 0;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-
-			con = DriverManager.getConnection(url, "scott", "tiger");
+			con = DBManager.getConnection();
 			String sql = "SELECT * FROM member WHERE id=? AND pw=?";
 
 			pstmt = con.prepareStatement(sql);
@@ -266,21 +176,7 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+		DBManager.close(con, pstmt, null);
 		}
 
 		return result;
@@ -288,61 +184,74 @@ public class MemberDAO {
 	// 회원 목록 조회 부분
 
 	public List<MemberDTO> listMembers() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<MemberDTO> memberList = new ArrayList<>();
+
+		try {
+			con = DBManager.getConnection();
+			String sql = "SELECT * FROM member";
+
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			// while 문으로 회원목록을 다 조회한다.
+			while (rs.next()) {
+				// 회원 정보를 가져와서 MemberDTO 객체 생성
+				String id = rs.getString("id");
+				String pw = rs.getString("pw");
+				String name = rs.getString("name");
+				String email = rs.getString("email");
+				MemberDTO member = new MemberDTO(id, pw, name, email);
+
+				// 리스트에 회원 추가
+				memberList.add(member);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DBManager.close(con, pstmt, rs);
+		}
+
+		// 회원 목록 반환
+		return memberList;
+	}
+	
+	public boolean isExistingId(String id) {
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
-	    List<MemberDTO> memberList = new ArrayList<>();
-
+	    boolean exists = false;
 	    try {
-	        Class.forName("oracle.jdbc.driver.OracleDriver");
-	        String url = "jdbc:oracle:thin:@10.211.55.3:1521:XE";
-
-	        con = DriverManager.getConnection(url, "scott", "tiger");
-	        String sql = "SELECT * FROM member";
-
-	        pstmt = con.prepareStatement(sql);
-	        rs = pstmt.executeQuery();
-
+	        con = DBManager.getConnection();
+	        String sql = "SELECT COUNT(*) AS cnt FROM member WHERE id = ?";
 	        
-	        //while 문으로 회원목록을 다 조회한다. 
-	        while (rs.next()) {
-	            // 회원 정보를 가져와서 MemberDTO 객체 생성
-	            String id = rs.getString("id");
-	            String pw = rs.getString("pw");
-	            String name = rs.getString("name");
-	            String email = rs.getString("email");
-	            MemberDTO member = new MemberDTO(id, pw, name, email);
-	            
-	            // 리스트에 회원 추가
-	            memberList.add(member);
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            int count = rs.getInt("cnt");
+	            exists = count > 0;
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    } finally {
-	        // 리소스 해제
-	        if (rs != null) {
-	            try {
-	                rs.close();
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	        if (pstmt != null) {
-	            try {
-	                pstmt.close();
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	        if (con != null) {
-	            try {
-	                con.close();
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
-	        }
+	        DBManager.close(con, pstmt, rs);
 	    }
+	    return exists;
+	}
 
-	    // 회원 목록 반환
-	    return memberList;
-	}}
+
+	public boolean isExistingId1(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public MemberDTO comparisonMember(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+}
