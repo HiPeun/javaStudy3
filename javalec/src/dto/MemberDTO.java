@@ -5,15 +5,14 @@ import java.sql.Date;
 public class MemberDTO {
 
 	private String id;
-    private String pw;
-    private String name;
-    private String email;
-    private Date indate;
-    
-    public MemberDTO() {
+	private String pw;
+	private String name;
+	private String email;
+	private Date indate;
+
+	public MemberDTO() {
 	}
 
-    
 	public MemberDTO(String id, String pw, String name, String email) {
 		super();
 		this.id = id;
@@ -22,7 +21,6 @@ public class MemberDTO {
 		this.email = email;
 	}
 
-
 	public MemberDTO(String id, String pw, String name, String email, Date indate) {
 		super();
 		this.id = id;
@@ -30,6 +28,25 @@ public class MemberDTO {
 		this.name = name;
 		this.email = email;
 		this.indate = indate;
+	}
+
+	public MemberDTO(String pw, String name, String email) {
+		super();
+		this.pw = pw;
+		this.name = name;
+		this.email = email;
+
+	}
+
+	public MemberDTO(String id, String pw) {
+		super();
+		this.id = id;
+		this.pw = pw;
+	}
+
+	public MemberDTO(String id) {
+		super();
+		this.id = id;
 	}
 
 	public String getId() {
@@ -72,20 +89,9 @@ public class MemberDTO {
 		this.indate = indate;
 	}
 
-
 	public String toString() {
 		return "MemberDTO [id=" + id + ", pw=" + pw + ", name=" + name + ", email=" + email + ", indate=" + indate
 				+ "]";
 	}
 
 }
-
-
-
-
-
-
-
-
-
-

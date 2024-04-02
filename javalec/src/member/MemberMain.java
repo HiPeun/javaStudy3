@@ -1,9 +1,11 @@
 package member;
 
+import java.util.List;
 import java.util.Scanner;
 import java.sql.*;
 
 import dao.MemberDAO;
+import dto.MemberDTO;
 
 public class MemberMain {
 
@@ -15,29 +17,29 @@ public class MemberMain {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		MemberDAO mDao = new MemberDAO();
-		
+
 		while (true) {
-			System.out.println("============< 메뉴 >============");
-			System.out.println("1. 회원가입 \t2. 회원정보 수정\t 3. 로그인");
-			System.out.println("4. 회원탈퇴 \t5. 시스템 종료\t 6. 회원목록");
-			System.out.println("7. 회원 검색");
-			
-			System.out.println("메뉴를 선택해 주세요: ");
+			System.out.println("================================< 회원 정보 메뉴  >===============================");
+			System.out.println("\t1. 회원가입 \t\t2. 회원정보 수정\t\t 3. 로그인");
+			System.out.println("\t4. 회원탈퇴 \t\t5. 시스템 종료\t\t 6. 회원목록");
+			System.out.println("\t7. 회원 검색");
+
+			System.out.print("\n\n메뉴를 선택해 주세요: ");
 			int selNum = sc.nextInt();
 			sc.nextLine();
 			if (selNum == 1) {
-				System.out.println("id를 입력해 주세요");
+				System.out.print("\n아이디를 입력해 주세요: ");
 				String id = sc.nextLine();
-				
-				System.out.println("pw를 입력해 주세요");
+
+				System.out.print("\n패스워드를 입력해 주세요: ");
 				String pw = sc.nextLine();
-				
-				System.out.println("name을 입력해 주세요");
+
+				System.out.print("\n이름을 입력해 주세요: ");
 				String name = sc.nextLine();
-				
-				System.out.println("email을 입력해 주세요");
+
+				System.out.print("\n 이메일을 입력해 주세요: ");
 				String email = sc.nextLine();
-				
+
 				dto.MemberDTO mDto = new dto.MemberDTO(id, pw, name, email);
 				int result = mDao.insertMember(mDto);
 				if (result > 0) {
@@ -46,28 +48,107 @@ public class MemberMain {
 					System.out.println("회원등록 실패");
 				}
 			} else if (selNum == 2) {
-				System.out.println("메뉴 2번이 선택되었습니다.");
+				System.out.print("수정할 회원의 아이디를 입력해 주세요: ");
+				String id = sc.nextLine();
+
+				System.out.print("현재 비밀번호를 입력해 주세요: ");
+				String pw = sc.nextLine();
+
+				// 현재 비밀번호를 이용하여 회원 정보를 조회합니다.
+				MemberDTO currentMember = mDao.getMemberById(id);
+
+				if (currentMember == null) {
+					System.out.println("해당 아이디의 회원이 존재하지 않습니다.");
+				} else {
+					// 입력한 비밀번호가 현재 회원의 비밀번호와 일치하는지 확인합니다.
+					if (!currentMember.getPw().equals(pw)) {
+						System.out.println("비밀번호가 일치하지 않습니다. 수정을 종료합니다.");
+					} else {
+						// 새로운 정보 입력 받음
+						System.out.println("새로운 패스워드를 입력해 주세요: ");
+						String newPw = sc.nextLine();
+
+						System.out.println("새로운 이름을 입력해 주세요: ");
+						String name = sc.nextLine();
+
+						System.out.println("새로운 이메일을 입력해 주세요: ");
+						String email = sc.nextLine();
+
+						// 회원 정보 업데이트
+						MemberDTO mDto = new MemberDTO(id, newPw, name, email);
+						int result = mDao.updateMember(mDto);
+
+						if (result > 0) {
+							System.out.println("회원 정보 수정 성공!!");
+						} else {
+							System.out.println("회원 정보 수정 실패...");
+						}
+					}
+				}
+
 			} else if (selNum == 3) {
-				System.out.println("메뉴 3번이 선택되었습니다.");
+				System.out.print("아이디를 입력해 주세요: ");
+				String id = sc.nextLine();
+
+				System.out.print("비밀번호를 입력해 주세요: ");
+				String pw = sc.nextLine();
+
+				MemberDTO mDto = new MemberDTO(id, pw);
+				int result = mDao.LoginMember(mDto);
+
+				if (result > 0) {
+					System.out.println(" 로그인이 성공적으로 이루어졌습니다. ");
+				} else {
+					System.out.println(" 존재하지 않는 비밀번호 입니다. ");
+				}
 			} else if (selNum == 4) {
-				System.out.println("메뉴 4번이 선택되었습니다.");
+				System.out.print(" 아이디를 입력해 주세요:");
+				String id = sc.nextLine();
+
+				System.out.print(" 비밀번호를 입력해 주세요:");
+				String pw = sc.nextLine();
+
+				MemberDTO mDto = new MemberDTO(id, pw);
+				int result = mDao.deleteMember(mDto);
+
+				if (result > 0) {
+					System.out.println("<======== 회원탈퇴가 완료 되었습니다. 다신보지 말아요 =========>");
+				} else {
+					System.out.println(" <============유효하지 않는 회원 정보 입니다.===============>");
+				}
+
 			} else if (selNum == 5) {
-				System.exit(0);
-				System.out.println("Good Bye!!!!");
-			} else if (selNum == 6) {
-				System.out.println("메뉴 5번이 선택되었습니다.");
+				System.out.println(" \n\n\n\n\n\n\n\n\n\n\n=<시스템이 종료 되었습니다.>= ");
+				break;
+			} else if (selNum == 6) {// 회원 목록 조회
+				List<MemberDTO> members = mDao.listMembers();
+
+				// 회원 목록 출력
+				System.out.println("============== <회원 목록> ===============");
+				for (MemberDTO member : members) {
+					System.out.println("[아이디]: " + member.getId() + ", [비밀번호]: " + member.getPw() + ", [이름]: "
+							+ member.getName() + ", [이메일]: " + member.getEmail());
+					
+				}System.out.println("========================================\n\n\n\n");
+				
+
 			} else if (selNum == 7) {
-				System.out.println("메뉴 6번이 선택되었습니다.");
+				System.out.print(" 조회하고 싶은 회원의 아이디를 입력하세요:  ");
+				String id = sc.nextLine();
+
+				// 회원 검색 메서드 호출
+				MemberDTO mDto = new MemberDTO(id);
+				MemberDTO foundMember = mDao.getMemberById(mDto.getId());
+
+				if (foundMember != null) {
+					// 회원이 존재할 때의 동작 추가
+					System.out.println(" 등록되어있는 회원 아이디입니다.");
+					// 회원 정보 출력 등 추가적인 동작 수행
+				} else {
+					// 회원이 존재하지 않을 때의 동작 추가
+					System.out.println("존재하지 않는 회원 아이디 입니다. ");
+				}
 			}
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
