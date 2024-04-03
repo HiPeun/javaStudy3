@@ -219,13 +219,14 @@ public class MemberDAO {
 	}
 	
 	public boolean isExistingId(String id) {
+		//값을 초기화 시켜 빈 박스로 만들어야 새로운 값을 담을 수 있기 때문에 초기화를 시켜준다. 
 	    Connection con = null;
 	    PreparedStatement pstmt = null;
 	    ResultSet rs = null;
 	    boolean exists = false;
 	    try {
-	        con = DBManager.getConnection();
-	        String sql = "SELECT COUNT(*) AS cnt FROM member WHERE id = ?";
+	        con = DBManager.getConnection(); //내가 만든 DBManager을 con에 담는다. 
+	        String sql = "SELECT COUNT(*) AS cnt FROM member WHERE id = ?";  //
 	        
 	        pstmt = con.prepareStatement(sql);
 	        pstmt.setString(1, id);
